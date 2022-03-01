@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package searcher;
+
+import "google/protobuf/timestamp.proto";
+import "bundle.proto";
+
+service SearcherService {
+  // RPC endpoint to subscribe to pending transactions.
+  // Client calls SubscribePendingTransactions with a list of public keys base58 formatted they are
+  // interested in subscribing to.
+  // Steams updates on pending transactions to client.
+  rpc SubscribePendingTransactions (PendingTxSubscriptionRequest) returns (stream PendingTxNotification) {}
+  rpc SendBundle (SendBundleRequest) returns (SendBundleResponse) {}
+  rpc SimulateBundle (SendBundleRequest) returns (SendBundleResponse) {}
+}
+
+message PendingTxSubscriptionRequest {
+  // list of accounts to subscribe to (can be data or program accounts)
+  repeated string accounts = 1;
+}
+
+message PendingTxNotification {
+  // server-side timestamp the transactions were generated at (for debugging/profiling purposes)
+  google.protobuf.Timestamp ts = 1;
+  // list of pending transactions
+  repeated string transactions = 2;
+}

@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+import "packet.proto";
+
+package bundle;
+
+message SubscribeBundlesRequest {
+
+}
+
+message SubscribeBundlesResponse {
+
+}
+
+message SendBundleRequest {
+
+}
+
+message SendBundleResponse {
+
+}
+
+message BundleTransaction {
+  Packet packet = 1;
+}
+
+message Bundle {
+  repeated BundleTransaction transactions = 1;
+}

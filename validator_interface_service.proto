@@ -2,6 +2,7 @@ syntax = "proto3";
 
 import "packet.proto";
 import "shared.proto";
+import "bundle.proto"
 
 package validator_interface;
 
@@ -21,4 +22,6 @@ service ValidatorInterface {
   rpc GetTpuConfigs (GetTpuConfigsRequest) returns (GetTpuConfigsResponse) {}
   // RPC endpoint to subscribe to signature-verified packets.
   rpc SubscribePackets (SubscribePacketsRequest) returns (stream SubscribePacketsResponse) {}
+  // RPC endpoint for the validator to subscribe to packets
+  rpc SubscribeBundles (SubscribeBundlesRequest) returns (stream SubscribeBundlesResponse) {}
 }
