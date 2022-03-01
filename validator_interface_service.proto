@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+import "packet.proto";
+import "shared.proto";
+
+package validator_interface;
+
+message SubscribePacketsRequest {}
+message SubscribePacketsResponse {
+  repeated packet.PacketBatch batch_list = 1;
+}
+
+message GetTpuConfigsRequest {}
+message GetTpuConfigsResponse {
+  shared.Socket tpu = 1;
+  shared.Socket tpu_forward = 2;
+}
+
+service ValidatorInterface {
+  // RPC endpoint to get the tpu `IP:PORT` to direct client traffic to from the validator.
+  rpc GetTpuConfigs (GetTpuConfigsRequest) returns (GetTpuConfigsResponse) {}
+  // RPC endpoint to subscribe to signature-verified packets.
+  rpc SubscribePackets (SubscribePacketsRequest) returns (stream SubscribePacketsResponse) {}
+}
