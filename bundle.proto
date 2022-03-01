@@ -4,24 +4,8 @@ import "packet.proto";
 
 package bundle;
 
-message SubscribeBundlesRequest {
-
-}
-
-message SubscribeBundlesResponse {
-
-}
-
-message SendBundleRequest {
-
-}
-
-message SendBundleResponse {
-
-}
-
 message BundleTransaction {
-  Packet packet = 1;
+  packet.Packet packet = 1;
 }
 
 message Bundle {

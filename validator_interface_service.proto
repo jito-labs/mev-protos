@@ -2,7 +2,7 @@ syntax = "proto3";
 
 import "packet.proto";
 import "shared.proto";
-import "bundle.proto"
+import "bundle.proto";
 
 package validator_interface;
 
@@ -15,6 +15,12 @@ message GetTpuConfigsRequest {}
 message GetTpuConfigsResponse {
   shared.Socket tpu = 1;
   shared.Socket tpu_forward = 2;
+}
+
+
+message SubscribeBundlesRequest {}
+message SubscribeBundlesResponse {
+  repeated bundle.Bundle bundles = 1;
 }
 
 service ValidatorInterface {
