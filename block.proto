@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package block;
+
+// Condensed block helpful for getting data around efficiently internal to our system.
+// NOTE: unknown if this will work well for older blocks, but that's a problem for later
+message CondensedBlock {
+  string previous_blockhash = 1;
+  string blockhash = 2;
+  uint64 parent_slot = 3;
+  repeated bytes versioned_transactions = 4;
+  //  repeated Reward rewards = 5;
+  //  UnixTimestamp block_time = 6;
+  //  BlockHeight block_height = 7;
+  uint64 slot = 8;
+  string commitment = 9;
+}
