@@ -8,7 +8,10 @@ package validator_interface;
 
 message SubscribePacketsRequest {}
 message SubscribePacketsResponse {
-  repeated packet.PacketBatch batch_list = 1;
+  oneof msg {
+    packet.PacketBatchWrapper batch_list = 1;
+    bool heartbeat = 2;
+  }
 }
 
 message GetTpuConfigsRequest {}
