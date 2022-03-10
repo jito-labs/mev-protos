@@ -4,7 +4,6 @@ package block;
 import "shared.proto";
 
 // Condensed block helpful for getting data around efficiently internal to our system.
-// NOTE: unknown if this will work well for older blocks, but that's a problem for later
 message CondensedBlock {
   shared.Header header = 1;
   string previous_blockhash = 2;
