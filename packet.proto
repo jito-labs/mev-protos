@@ -17,7 +17,7 @@ message PacketBatchList {
 }
 
 message PacketBatchWrapper {
-  repeated PacketBatch pb = 1;
+  repeated PacketBatch batch_list = 1;
 }
 
 message PacketBatch {
