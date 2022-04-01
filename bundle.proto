@@ -4,10 +4,6 @@ import "packet.proto";
 
 package bundle;
 
-message BundleTransaction {
-  packet.Packet packet = 1;
-}
-
 message Bundle {
-  repeated BundleTransaction transactions = 1;
+  repeated packet.Packet packets = 1;
 }
