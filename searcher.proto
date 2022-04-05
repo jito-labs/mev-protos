@@ -7,7 +7,7 @@ import "bundle.proto";
 import "packet.proto";
 
 message SendBundleRequest {
-  repeated bundle.Bundle bundles = 1;
+  bundle.Bundle bundle = 1;
 }
 
 message SendBundleResponse {}
@@ -31,5 +31,4 @@ service SearcherService {
   // Steams updates on pending transactions to client.
   rpc SubscribePendingTransactions (PendingTxSubscriptionRequest) returns (stream PendingTxNotification) {}
   rpc SendBundle (SendBundleRequest) returns (SendBundleResponse) {}
-  rpc SimulateBundle (SendBundleRequest) returns (SendBundleResponse) {}
 }
