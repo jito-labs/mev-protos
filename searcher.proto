@@ -3,11 +3,18 @@ syntax = "proto3";
 package searcher;
 
 import "google/protobuf/timestamp.proto";
+
 import "bundle.proto";
 import "packet.proto";
+import "shared.proto";
 
 message SendBundleRequest {
-  bundle.Bundle bundle = 1;
+  // Searchers are required to declare the tip receiver and amount their bundles
+  // contain. This will ultimately be verified by our simulation server. The tip_pda
+  // must also match the one assigned to the searcher.
+  string tip_pda = 1;
+  int64 tip_lamports = 2;
+  bundle.Bundle bundle = 3;
 }
 
 message SendBundleResponse {}
@@ -15,6 +22,10 @@ message SendBundleResponse {}
 message PendingTxSubscriptionRequest {
   // list of accounts to subscribe to (can be data or program accounts)
   repeated string accounts = 1;
+}
+
+message AssignedTipPdaNotification {
+  string tip_pda = 1;
 }
 
 message PendingTxNotification {
@@ -30,5 +41,9 @@ service SearcherService {
   // interested in subscribing to.
   // Steams updates on pending transactions to client.
   rpc SubscribePendingTransactions (PendingTxSubscriptionRequest) returns (stream PendingTxNotification) {}
+  // RPC endpoint to update searchers on their assigned tip pda accounts.
+  // This will update periodically to balance contention across the PDAs, therefore clients are required
+  // to maintain this connection and update internal state to submit bundles with the correct assigned tip_pda.
+  rpc SubscribeAssignedTipPdaUpdates (shared.Empty) returns (stream AssignedTipPdaNotification) {}
   rpc SendBundle (SendBundleRequest) returns (SendBundleResponse) {}
 }
