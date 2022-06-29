@@ -42,7 +42,7 @@ service ValidatorInterface {
   // RPC endpoint to get the tpu `IP:PORT` to direct client traffic to from the validator.
   rpc GetTpuConfigs (GetTpuConfigsRequest) returns (GetTpuConfigsResponse) {}
   // RPC endpoint for validator to pull packets or relayer to push packets
-  rpc StartBiDirectionalPacketStream (stream PacketStreamMSG) returns (stream PacketStreamMSG) {}
+  rpc StartBiDirectionalPacketStream (stream PacketStreamMsg) returns (stream PacketStreamMsg) {}
   // RPC endpoint for the validator to subscribe to bundles from block engine
   rpc SubscribeBundles (SubscribeBundlesRequest) returns (stream SubscribeBundlesResponse) {}
   // RPC endpoint for relayer to subscribe to accounts of interest from block engine
