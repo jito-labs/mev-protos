@@ -6,10 +6,10 @@ import "bundle.proto";
 
 package validator_interface;
 
-message PacketStreamMSG {
+message PacketStreamMsg {
   oneof msg {
     packet.PacketBatchList batch_list = 1;
-    shared.header heartbeat = 2;
+    shared.Header heartbeat = 2;
   }
 }
 
