@@ -11,8 +11,8 @@ message SubscribePacketsRequest {
 }
 message SubscribePacketsResponse {
   oneof msg {
-    packet.PacketBatchWrapper batch_list = 1;
-    bool heartbeat = 2;
+    packet.PacketBatchList batch_list = 1;
+    shared.header heartbeat = 2;
   }
 }
 

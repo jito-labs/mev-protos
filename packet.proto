@@ -14,6 +14,7 @@ message PacketBatchListWrapper {
 message PacketBatchList {
   shared.Header header = 1;
   repeated PacketBatch batch_list = 2;
+  uint32 expiry = 3;
 }
 
 message PacketBatchWrapper {
@@ -27,7 +28,6 @@ message PacketBatch {
 message Packet {
   bytes data = 1;
   Meta meta = 2;
-  uint64 expiry = 3;
 }
 
 message Meta {
