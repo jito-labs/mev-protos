@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package relayer;
+
+message addAOI { repeated string accounts = 1;}
+// "*" adds to all accounts
+message removeAOI { repeated string accounts = 1;}
+// "*" removes to all accounts
+
+message AOISubRequest {}
+message AOISubResponse {
+  oneof msg {
+    addAOI add = 1;
+    removeAOI rem = 2;
+    bool heartbeat = 3;
+  }
+}
+
+service RelayerInterface {
+  rpc SubscribeAOI(AOISubRequest) returns (stream AOISubResponse) {}
+}

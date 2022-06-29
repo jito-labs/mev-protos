@@ -6,7 +6,9 @@ import "bundle.proto";
 
 package validator_interface;
 
-message SubscribePacketsRequest {}
+message SubscribePacketsRequest {
+  bool is_block_engine = 1;
+}
 message SubscribePacketsResponse {
   oneof msg {
     packet.PacketBatchWrapper batch_list = 1;

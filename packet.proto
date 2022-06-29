@@ -27,6 +27,7 @@ message PacketBatch {
 message Packet {
   bytes data = 1;
   Meta meta = 2;
+  uint64 expiry = 3;
 }
 
 message Meta {
@@ -34,6 +35,7 @@ message Meta {
   string addr = 2;
   uint32 port = 3;
   PacketFlags flags = 4;
+  uint64 sender_stake = 5;
 }
 
 message PacketFlags {
@@ -41,6 +43,6 @@ message PacketFlags {
   bool forwarded = 2;
   bool repair = 3;
   bool simple_vote_tx = 4;
-  bool tracer_tx = 5;
+  bool tracer_packet = 5;
 }
 
