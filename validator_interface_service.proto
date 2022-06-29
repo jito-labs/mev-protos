@@ -12,7 +12,7 @@ message SubscribePacketsRequest {
 message SubscribePacketsResponse {
   oneof msg {
     packet.PacketBatchList batch_list = 1;
-    shared.header heartbeat = 2;
+    shared.Header heartbeat = 2;
   }
 }
 
