@@ -6,17 +6,16 @@ import "bundle.proto";
 
 package validator_interface;
 
-message SubscribePacketsRequest {
-  oneof msg {
-    packet.PacketBatchList batch_list = 1;
-    shared.header heartbeat = 2;
-  }
+message ConnectionInit{
+    bool push = 1;
+    bool pull = 2;
 }
 
-message SubscribePacketsResponse {
+message PacketStreamMSG {
   oneof msg {
-    packet.PacketBatchList batch_list = 1;
-    shared.Header heartbeat = 2;
+    ConnectionInit init = 1;
+    packet.PacketBatchList batch_list = 2;
+    shared.header heartbeat = 3;
   }
 }
 
@@ -49,7 +48,7 @@ service ValidatorInterface {
   // RPC endpoint to get the tpu `IP:PORT` to direct client traffic to from the validator.
   rpc GetTpuConfigs (GetTpuConfigsRequest) returns (GetTpuConfigsResponse) {}
   // RPC endpoint for validator to pull packets or relayer to push packets
-  rpc StartBiDirectionalPacketStream (stream SubscribePacketsRequest) returns (stream SubscribePacketsResponse) {}
+  rpc StartBiDirectionalPacketStream (stream PacketStreamMSG) returns (stream PacketStreamMSG) {}
   // RPC endpoint for the validator to subscribe to bundles from block engine
   rpc SubscribeBundles (SubscribeBundlesRequest) returns (stream SubscribeBundlesResponse) {}
   // RPC endpoint for relayer to subscribe to accounts of interest from block engine
