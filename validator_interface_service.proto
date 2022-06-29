@@ -6,11 +6,10 @@ import "bundle.proto";
 
 package validator_interface;
 
-message SubscribePacketsRequest {}
-message SubscribePacketsResponse {
+message PacketStreamMsg {
   oneof msg {
-    packet.PacketBatchWrapper batch_list = 1;
-    bool heartbeat = 2;
+    packet.PacketBatchList batch_list = 1;
+    shared.Header heartbeat = 2;
   }
 }
 
@@ -26,11 +25,27 @@ message SubscribeBundlesResponse {
   repeated bundle.Bundle bundles = 1;
 }
 
+message addAOI { repeated string accounts = 1;}
+// "*" adds to all accounts
+message removeAOI { repeated string accounts = 1;}
+// "*" removes to all accounts
+
+message AOISubRequest {}
+message AOISubResponse {
+  oneof msg {
+    addAOI add = 1;
+    removeAOI rem = 2;
+  }
+}
+
 service ValidatorInterface {
   // RPC endpoint to get the tpu `IP:PORT` to direct client traffic to from the validator.
   rpc GetTpuConfigs (GetTpuConfigsRequest) returns (GetTpuConfigsResponse) {}
-  // RPC endpoint to subscribe to signature-verified packets.
-  rpc SubscribePackets (SubscribePacketsRequest) returns (stream SubscribePacketsResponse) {}
-  // RPC endpoint for the validator to subscribe to bundles
+  // RPC endpoint for validator to pull packets or relayer to push packets
+  rpc StartBiDirectionalPacketStream (stream PacketStreamMsg) returns (stream PacketStreamMsg) {}
+  // RPC endpoint for the validator to subscribe to bundles from block engine
   rpc SubscribeBundles (SubscribeBundlesRequest) returns (stream SubscribeBundlesResponse) {}
+  // RPC endpoint for relayer to subscribe to accounts of interest from block engine
+  rpc SubscribeAOI(AOISubRequest) returns (stream AOISubResponse) {}
+
 }
