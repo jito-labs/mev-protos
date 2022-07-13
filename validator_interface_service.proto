@@ -38,7 +38,20 @@ message AOISubResponse {
   }
 }
 
+message GenerateChallengeTokenResponse {
+  // The token the validator is expected to sign.
+  string token = 1;
+}
+
+message GenerateChallengeTokenRequest {
+  // The validator's pubkey corresponding to the keypair used to sign the token.
+  string pubkey = 1;
+}
+
 service ValidatorInterface {
+  // Generates a token that should be signed by the validator's keypair which in turn is included in subsequent
+  // requests requiring auth.
+  rpc GenerateChallengeToken (GenerateChallengeTokenRequest) returns (GenerateChallengeTokenResponse) {}
   // RPC endpoint to get the tpu `IP:PORT` to direct client traffic to from the validator.
   rpc GetTpuConfigs (GetTpuConfigsRequest) returns (GetTpuConfigsResponse) {}
   // RPC endpoint for validator to pull packets or relayer to push packets
@@ -47,5 +60,4 @@ service ValidatorInterface {
   rpc SubscribeBundles (SubscribeBundlesRequest) returns (stream SubscribeBundlesResponse) {}
   // RPC endpoint for relayer to subscribe to accounts of interest from block engine
   rpc SubscribeAOI(AOISubRequest) returns (stream AOISubResponse) {}
-
 }
