@@ -9,7 +9,8 @@ message Header {
 }
 
 message Heartbeat {
-  uint64 count = 1;
+  google.protobuf.Timestamp ts = 1;
+  uint64 count = 2;
 }
 
 message Socket {

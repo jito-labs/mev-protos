@@ -25,10 +25,11 @@ message AccountsOfInterest {
 }
 
 message AccountsOfInterestRequest {}
-message AccountsOfInterestResponse {
+message AccountsOfInterestUpdate {
   oneof msg {
     AccountsOfInterest add = 1;
     AccountsOfInterest remove = 2;
+    AccountsOfInterest overwrite = 3;
   }
 }
 
@@ -47,12 +48,14 @@ message ExpiringPacketBatches {
 // how long it has until the relayer forwards the packets to the validator.
 // Heartbeats contain a timestamp from the system and is used as a simple and naive time-sync mechanism
 // so the block engine has some idea on how far their clocks are apart.
-message SubscribeExpiringPacketsRequest {
+message PacketBatchesUpdate {
   oneof msg {
     ExpiringPacketBatches batches = 1;
     shared.Heartbeat heartbeat = 2;
   }
 }
+
+message SubscribeExpiringPacketsResponse {}
 
 /// Validators can connect to Block Engines to receive packets and bundles.
 service BlockEngineValidator {
@@ -67,9 +70,9 @@ service BlockEngineValidator {
 service BlockEngineRelayer {
   /// Relayers subscribe to a stream that contains a set of accounts they're interested in getting transactions for.
   /// They receive periodic updates for those accounts
-  rpc SubscribeAccountsOfInterest (AccountsOfInterestRequest) returns (stream AccountsOfInterestResponse) {}
+  rpc SubscribeAccountsOfInterest (AccountsOfInterestRequest) returns (stream AccountsOfInterestUpdate) {}
 
   // Validators can subscribe to packets from the relayer and receive a multiplexed signal that contains a mixture
   // of packets and heartbeats
-  rpc SubscribeExpiringPackets (SubscribeExpiringPacketsRequest) returns (stream SubscribePacketsResponse) {}
+  rpc StartExpiringPacketStream (stream PacketBatchesUpdate) returns (SubscribeExpiringPacketsResponse) {}
 }
