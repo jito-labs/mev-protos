@@ -5,14 +5,22 @@ import "google/protobuf/timestamp.proto";
 import "packet.proto";
 import "shared.proto";
 import "bundle.proto";
-import "relayer.proto";
 
 package block_engine;
+
+message GetTpuConfigsRequest {}
+message GetTpuConfigsResponse {
+  shared.Socket tpu = 1;
+  shared.Socket tpu_forward = 2;
+}
 
 message SubscribePacketsRequest {}
 message SubscribePacketsResponse {
   shared.Header header = 1;
-  packet.PacketBatch batch = 2;
+  oneof msg {
+    packet.PacketBatch batch = 2;
+    shared.Heartbeat heartbeat = 3;
+  }
 }
 
 message SubscribeBundlesRequest {}
@@ -67,7 +75,7 @@ service BlockEngineValidator {
   rpc SubscribeBundles (SubscribeBundlesRequest) returns (stream SubscribeBundlesResponse) {}
 
   // The block engine can also act as a relayer
-  rpc GetTpuConfigs (relayer.GetTpuConfigsRequest) returns (relayer.GetTpuConfigsResponse) {}
+  rpc GetTpuConfigs (GetTpuConfigsRequest) returns (GetTpuConfigsResponse) {}
 }
 
 /// Relayers can forward packets to Block Engines.
