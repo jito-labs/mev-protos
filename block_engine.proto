@@ -5,6 +5,7 @@ import "google/protobuf/timestamp.proto";
 import "packet.proto";
 import "shared.proto";
 import "bundle.proto";
+import "relayer.proto";
 
 package block_engine;
 
@@ -59,10 +60,14 @@ message SubscribeExpiringPacketsResponse {}
 
 /// Validators can connect to Block Engines to receive packets and bundles.
 service BlockEngineValidator {
-  /// Validators
+  /// Validators can subscribe to the block engine to receive a stream of packets
   rpc SubscribePackets (SubscribePacketsRequest) returns (stream SubscribePacketsResponse) {}
 
+  /// Validators can subscribe to the block engine to receive a stream of simulated and profitable bundles
   rpc SubscribeBundles (SubscribeBundlesRequest) returns (stream SubscribeBundlesResponse) {}
+
+  // The block engine can also act as a relayer
+  rpc GetTpuConfigs (relayer.GetTpuConfigsRequest) returns (relayer.GetTpuConfigsResponse) {}
 }
 
 /// Relayers can forward packets to Block Engines.
