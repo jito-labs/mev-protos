@@ -42,13 +42,13 @@ message AccountsOfInterestUpdate {
   }
 }
 
-// A series of packet batches with an expiration attached to them.
+// A series of packets with an expiration attached to them.
 // The header contains a timestamp for when this packet was generated.
 // The expiry is how long the packet batches have before they expire and are forwarded to the validator.
 // This provides a more censorship resistant method to MEV than block engines receiving packets directly.
-message ExpiringPacketBatches {
+message ExpiringPacketBatch {
   shared.Header header = 1;
-  repeated packet.PacketBatch batch_list = 2;
+  packet.PacketBatch batch = 2;
   uint32 expiry_ms = 3;
 }
 
@@ -57,9 +57,9 @@ message ExpiringPacketBatches {
 // how long it has until the relayer forwards the packets to the validator.
 // Heartbeats contain a timestamp from the system and is used as a simple and naive time-sync mechanism
 // so the block engine has some idea on how far their clocks are apart.
-message PacketBatchesUpdate {
+message PacketBatchUpdate {
   oneof msg {
-    ExpiringPacketBatches batches = 1;
+    ExpiringPacketBatch batches = 1;
     shared.Heartbeat heartbeat = 2;
   }
 }
@@ -87,5 +87,5 @@ service BlockEngineRelayer {
 
   // Validators can subscribe to packets from the relayer and receive a multiplexed signal that contains a mixture
   // of packets and heartbeats
-  rpc StartExpiringPacketStream (stream PacketBatchesUpdate) returns (SubscribeExpiringPacketsResponse) {}
+  rpc StartExpiringPacketStream (stream PacketBatchUpdate) returns (SubscribeExpiringPacketsResponse) {}
 }
