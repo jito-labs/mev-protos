@@ -10,7 +10,10 @@ message SendBundleRequest {
   bundle.Bundle bundle = 1;
 }
 
-message SendBundleResponse {}
+message SendBundleResponse {
+  // server uuid for the bundle
+  string uuid = 1;
+}
 
 message PendingTxSubscriptionRequest {
   // list of accounts to subscribe to (can be data or program accounts)

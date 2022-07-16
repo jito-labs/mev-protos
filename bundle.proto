@@ -6,6 +6,6 @@ import "shared.proto";
 package bundle;
 
 message Bundle {
-  shared.Header header = 1;
-  repeated packet.Packet packets = 2;
+  shared.Header header = 2;
+  repeated packet.Packet packets = 3;
 }
