@@ -9,3 +9,8 @@ message Bundle {
   shared.Header header = 2;
   repeated packet.Packet packets = 3;
 }
+
+message BundleUuid {
+  bundle.Bundle bundle = 1;
+  string uuid = 2;
+}
