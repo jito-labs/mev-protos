@@ -1,7 +1,5 @@
 syntax = "proto3";
 
-import "shared.proto";
-
 package packet;
 
 message PacketBatch {

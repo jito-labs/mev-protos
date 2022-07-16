@@ -1,0 +1,91 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+import "packet.proto";
+import "shared.proto";
+import "bundle.proto";
+
+package block_engine;
+
+message GetTpuConfigsRequest {}
+message GetTpuConfigsResponse {
+  shared.Socket tpu = 1;
+  shared.Socket tpu_forward = 2;
+}
+
+message SubscribePacketsRequest {}
+message SubscribePacketsResponse {
+  shared.Header header = 1;
+  oneof msg {
+    packet.PacketBatch batch = 2;
+    shared.Heartbeat heartbeat = 3;
+  }
+}
+
+message SubscribeBundlesRequest {}
+message SubscribeBundlesResponse {
+  repeated bundle.BundleUuid bundles = 1;
+}
+
+message AccountsOfInterest {
+  // use * for all accounts
+  repeated string accounts = 1;
+}
+
+message AccountsOfInterestRequest {}
+message AccountsOfInterestUpdate {
+  oneof msg {
+    AccountsOfInterest add = 1;
+    AccountsOfInterest remove = 2;
+    AccountsOfInterest overwrite = 3;
+  }
+}
+
+// A series of packets with an expiration attached to them.
+// The header contains a timestamp for when this packet was generated.
+// The expiry is how long the packet batches have before they expire and are forwarded to the validator.
+// This provides a more censorship resistant method to MEV than block engines receiving packets directly.
+message ExpiringPacketBatch {
+  shared.Header header = 1;
+  packet.PacketBatch batch = 2;
+  uint32 expiry_ms = 3;
+}
+
+// Packets and heartbeats are sent over the same stream.
+// ExpiringPacketBatches have an expiration attached to them so the block engine can track
+// how long it has until the relayer forwards the packets to the validator.
+// Heartbeats contain a timestamp from the system and is used as a simple and naive time-sync mechanism
+// so the block engine has some idea on how far their clocks are apart.
+message PacketBatchUpdate {
+  oneof msg {
+    ExpiringPacketBatch batches = 1;
+    shared.Heartbeat heartbeat = 2;
+  }
+}
+
+message SubscribeExpiringPacketsResponse {}
+
+/// Validators can connect to Block Engines to receive packets and bundles.
+service BlockEngineValidator {
+  /// Validators can subscribe to the block engine to receive a stream of packets
+  rpc SubscribePackets (SubscribePacketsRequest) returns (stream SubscribePacketsResponse) {}
+
+  /// Validators can subscribe to the block engine to receive a stream of simulated and profitable bundles
+  rpc SubscribeBundles (SubscribeBundlesRequest) returns (stream SubscribeBundlesResponse) {}
+
+  // The block engine can also act as a relayer
+  rpc GetTpuConfigs (GetTpuConfigsRequest) returns (GetTpuConfigsResponse) {}
+}
+
+/// Relayers can forward packets to Block Engines.
+/// Block Engines provide an AccountsOfInterest field to only send transactions that are of interest.
+service BlockEngineRelayer {
+  /// Relayers subscribe to a stream that contains a set of accounts they're interested in getting transactions for.
+  /// They receive periodic updates for those accounts
+  rpc SubscribeAccountsOfInterest (AccountsOfInterestRequest) returns (stream AccountsOfInterestUpdate) {}
+
+  // Validators can subscribe to packets from the relayer and receive a multiplexed signal that contains a mixture
+  // of packets and heartbeats
+  rpc StartExpiringPacketStream (stream PacketBatchUpdate) returns (SubscribeExpiringPacketsResponse) {}
+}
