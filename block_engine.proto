@@ -25,7 +25,7 @@ message SubscribePacketsResponse {
 
 message SubscribeBundlesRequest {}
 message SubscribeBundlesResponse {
-  repeated bundle.Bundle bundles = 1;
+  repeated bundle.BundleUuid bundles = 1;
 }
 
 message AccountsOfInterest {
