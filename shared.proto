@@ -9,7 +9,7 @@ message Header {
 }
 
 message Heartbeat {
-  uint64 count = 2;
+  uint64 count = 1;
 }
 
 message Socket {
