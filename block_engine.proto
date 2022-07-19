@@ -1,7 +1,5 @@
 syntax = "proto3";
 
-import "google/protobuf/timestamp.proto";
-
 import "packet.proto";
 import "shared.proto";
 import "bundle.proto";

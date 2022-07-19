@@ -22,9 +22,11 @@ message PendingTxSubscriptionRequest {
 
 message PendingTxNotification {
   // server-side timestamp the transactions were generated at (for debugging/profiling purposes)
-  google.protobuf.Timestamp ts = 1;
+  google.protobuf.Timestamp server_side_ts = 1;
+  // expiration time of the packet
+  google.protobuf.Timestamp expiration_time = 2;
   // list of pending transactions
-  repeated packet.Packet transactions = 2;
+  repeated packet.Packet transactions = 3;
 }
 
 service SearcherService {
