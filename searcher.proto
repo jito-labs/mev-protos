@@ -29,6 +29,18 @@ message PendingTxNotification {
   repeated packet.Packet transactions = 3;
 }
 
+message NextScheduledLeaderRequest {}
+
+message NextScheduledLeaderResponse {}
+
+message ConnectedLeadersRequest {}
+
+message ConnectedLeadersResponse {}
+
+message GetTipAccountsRequest {}
+
+message GetTipAccountsResponse {}
+
 service SearcherService {
   // RPC endpoint to subscribe to pending transactions.
   // Client calls SubscribePendingTransactions with a list of public keys base58 formatted they are
@@ -36,4 +48,13 @@ service SearcherService {
   // Steams updates on pending transactions to client.
   rpc SubscribePendingTransactions (PendingTxSubscriptionRequest) returns (stream PendingTxNotification) {}
   rpc SendBundle (SendBundleRequest) returns (SendBundleResponse) {}
+
+  // Returns the next scheduled leader connected to the block engine.
+  rpc GetNextScheduledLeader (NextScheduledLeaderRequest) returns (NextScheduledLeaderResponse) {}
+
+  // Returns information on the next connected leaders.
+  rpc GetConnectedLeaders (ConnectedLeadersRequest) returns (ConnectedLeadersResponse) {}
+
+  // Returns the tip accounts searchers shall transfer funds to for the leader to claim.
+  rpc GetTipAccounts (GetTipAccountsRequest) returns (GetTipAccountsResponse) {}
 }
