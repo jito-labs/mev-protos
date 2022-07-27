@@ -67,7 +67,7 @@ service SearcherService {
   // Returns the next scheduled leader connected to the block engine.
   rpc GetNextScheduledLeader (NextScheduledLeaderRequest) returns (NextScheduledLeaderResponse) {}
 
-  // Returns information on the next connected leaders.
+  // Returns information on connected leader slots
   rpc GetConnectedLeaders (ConnectedLeadersRequest) returns (ConnectedLeadersResponse) {}
 
   // Returns the tip accounts searchers shall transfer funds to for the leader to claim.
