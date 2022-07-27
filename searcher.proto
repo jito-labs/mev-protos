@@ -6,6 +6,10 @@ import "google/protobuf/timestamp.proto";
 import "bundle.proto";
 import "packet.proto";
 
+message SlotList {
+  repeated uint64 slots = 1;
+}
+
 message SendBundleRequest {
   bundle.Bundle bundle = 1;
 }
@@ -29,6 +33,29 @@ message PendingTxNotification {
   repeated packet.Packet transactions = 3;
 }
 
+message NextScheduledLeaderRequest {}
+
+message NextScheduledLeaderResponse {
+  // the current slot the backend is on
+  uint64 current_slot = 1;
+
+  // the slot and identity of the next leader
+  uint64 next_leader_slot = 2;
+  string next_leader_identity = 3;
+}
+
+message ConnectedLeadersRequest {}
+
+message ConnectedLeadersResponse {
+  map<string, SlotList> connected_validators = 1;
+}
+
+message GetTipAccountsRequest {}
+
+message GetTipAccountsResponse {
+  repeated string accounts = 1;
+}
+
 service SearcherService {
   // RPC endpoint to subscribe to pending transactions.
   // Client calls SubscribePendingTransactions with a list of public keys base58 formatted they are
@@ -36,4 +63,13 @@ service SearcherService {
   // Steams updates on pending transactions to client.
   rpc SubscribePendingTransactions (PendingTxSubscriptionRequest) returns (stream PendingTxNotification) {}
   rpc SendBundle (SendBundleRequest) returns (SendBundleResponse) {}
+
+  // Returns the next scheduled leader connected to the block engine.
+  rpc GetNextScheduledLeader (NextScheduledLeaderRequest) returns (NextScheduledLeaderResponse) {}
+
+  // Returns information on connected leader slots
+  rpc GetConnectedLeaders (ConnectedLeadersRequest) returns (ConnectedLeadersResponse) {}
+
+  // Returns the tip accounts searchers shall transfer funds to for the leader to claim.
+  rpc GetTipAccounts (GetTipAccountsRequest) returns (GetTipAccountsResponse) {}
 }
