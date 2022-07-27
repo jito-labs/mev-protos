@@ -6,6 +6,10 @@ import "google/protobuf/timestamp.proto";
 import "bundle.proto";
 import "packet.proto";
 
+message SlotList {
+  repeated uint64 slots = 1;
+}
+
 message SendBundleRequest {
   bundle.Bundle bundle = 1;
 }
@@ -31,15 +35,26 @@ message PendingTxNotification {
 
 message NextScheduledLeaderRequest {}
 
-message NextScheduledLeaderResponse {}
+message NextScheduledLeaderResponse {
+  // the current slot the backend is on
+  uint64 current_slot = 1;
+
+  // the slot and identity of the next leader
+  uint64 next_leader_slot = 2;
+  string next_leader_identity = 3;
+}
 
 message ConnectedLeadersRequest {}
 
-message ConnectedLeadersResponse {}
+message ConnectedLeadersResponse {
+  map<string, SlotList> connected_validators = 1;
+}
 
 message GetTipAccountsRequest {}
 
-message GetTipAccountsResponse {}
+message GetTipAccountsResponse {
+  repeated string accounts = 1;
+}
 
 service SearcherService {
   // RPC endpoint to subscribe to pending transactions.
