@@ -66,6 +66,9 @@ message SubscribeExpiringPacketsResponse {}
 
 /// Validators can connect to Block Engines to receive packets and bundles.
 service BlockEngineValidator {
+  /// Call this method before calling any other method to generate a new auth challenge.
+  rpc GenerateAuthChallenge(shared.Empty) returns (shared.AuthChallenge) {}
+
   /// Validators can subscribe to the block engine to receive a stream of packets
   rpc SubscribePackets (SubscribePacketsRequest) returns (stream SubscribePacketsResponse) {}
 
@@ -79,6 +82,9 @@ service BlockEngineValidator {
 /// Relayers can forward packets to Block Engines.
 /// Block Engines provide an AccountsOfInterest field to only send transactions that are of interest.
 service BlockEngineRelayer {
+  /// Call this method before calling any other method to generate a new auth challenge.
+  rpc GenerateAuthChallenge(shared.Empty) returns (shared.AuthChallenge) {}
+
   /// Relayers subscribe to a stream that contains a set of accounts they're interested in getting transactions for.
   /// They receive periodic updates for those accounts
   rpc SubscribeAccountsOfInterest (AccountsOfInterestRequest) returns (stream AccountsOfInterestUpdate) {}
