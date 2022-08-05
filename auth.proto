@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+package auth;
+
+enum Role {
+  RELAYER = 0;
+  SEARCHER = 1;
+  VALIDATOR = 2;
+}
+
+message GenerateAuthChallengeRequest {
+  /// Role the client is attempting to generate tokens for.
+  Role role = 1;
+
+  /// Client's pubkey.
+  string pubkey = 2;
+}
+
+message GenerateAuthChallengeResponse {
+  string challenge = 1;
+}
+
+message GenerateAuthTokensRequest {
+  /// The challenge signed by the client's private key. The private key must correspond to the pubkey passed in the
+  /// [GenerateAuthChallenge] method.
+  string signed_challenge = 1;
+}
+
+message GenerateAuthTokensResponse {
+  /// The token granting access to resources.
+  string access_token = 1;
+
+  /// The token used to refresh the access_token. This has a longer TTL than the access_token.
+  string refresh_token = 2;
+}
+
+message RefreshAccessTokenRequest {
+  /// Non-expired refresh token obtained from the [GenerateAuthTokens] method.
+  string refresh_token = 1;
+}
+
+message RefreshAccessTokenResponse {
+  /// Fresh access_token.
+  string access_token = 1;
+}
+
+/// This service is responsible for issuing auth tokens to clients for API access.
+service Auth {
+  /// Returns a challenge, client is expected to sign this challenge with an appropriate keypair in order to obtain access tokens.
+  rpc GenerateAuthChallenge(GenerateAuthChallengeRequest) returns (GenerateAuthChallengeResponse) {}
+
+  /// Provides the client with the initial pair of auth tokens for API access.
+  rpc GenerateAuthTokens(GenerateAuthTokensRequest) returns (GenerateAuthTokensResponse) {}
+
+  /// Call this method with a non-expired refresh token to obtain a new access token.
+  rpc RefreshAccessToken(RefreshAccessTokenRequest) returns (RefreshAccessTokenResponse) {}
+}
+
