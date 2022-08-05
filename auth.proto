@@ -45,7 +45,7 @@ message RefreshAccessTokenResponse {
 }
 
 /// This service is responsible for issuing auth tokens to clients for API access.
-service Auth {
+service AuthService {
   /// Returns a challenge, client is expected to sign this challenge with an appropriate keypair in order to obtain access tokens.
   rpc GenerateAuthChallenge(GenerateAuthChallengeRequest) returns (GenerateAuthChallengeResponse) {}
 
