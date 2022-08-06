@@ -28,7 +28,7 @@ message GenerateAuthTokensRequest {
   string client_pubkey = 2;
 
   /// The challenge signed by the client's private key. The private key must correspond to the pubkey passed in the
-  /// [GenerateAuthChallenge] method. The client is expected to sign the challenge token appended with their pubkey.
+  /// [GenerateAuthChallenge] method. The client is expected to sign the challenge token prepended with their pubkey.
   /// For example sign(pubkey, challenge).
   string signed_challenge = 3;
 }
