@@ -14,8 +14,8 @@ message GenerateAuthChallengeRequest {
   /// Role the client is attempting to generate tokens for.
   Role role = 1;
 
-  /// Client's pubkey.
-  string pubkey = 2;
+  /// Client's 32 byte pubkey.
+  bytes pubkey = 2;
 }
 
 message GenerateAuthChallengeResponse {
@@ -26,13 +26,13 @@ message GenerateAuthTokensRequest {
   /// The pre-signed challenge.
   string challenge = 1;
 
-  /// The signing keypair's corresponding pubkey.
-  string client_pubkey = 2;
+  /// The signing keypair's corresponding 32 byte pubkey.
+  bytes client_pubkey = 2;
 
-  /// The challenge signed by the client's private key. The private key must correspond to the pubkey passed in the
-  /// [GenerateAuthChallenge] method. The client is expected to sign the challenge token prepended with their pubkey.
-  /// For example sign(pubkey, challenge).
-  string signed_challenge = 3;
+  /// The 64 byte signature of the challenge signed by the client's private key. The private key must correspond to
+  // the pubkey passed in the [GenerateAuthChallenge] method. The client is expected to sign the challenge token
+  // prepended with their pubkey. For example sign(pubkey, challenge).
+  bytes signed_challenge = 3;
 }
 
 message Token {
