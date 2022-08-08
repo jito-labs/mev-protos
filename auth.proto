@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package auth;
 
+import "google/protobuf/timestamp.proto";
+
 enum Role {
   RELAYER = 0;
   SEARCHER = 1;
@@ -33,12 +35,20 @@ message GenerateAuthTokensRequest {
   string signed_challenge = 3;
 }
 
+message Token {
+    /// The token.
+    string value = 1;
+
+    /// When the token will expire.
+    google.protobuf.Timestamp expires_at_utc = 2;
+}
+
 message GenerateAuthTokensResponse {
   /// The token granting access to resources.
-  string access_token = 1;
+  Token access_token = 1;
 
   /// The token used to refresh the access_token. This has a longer TTL than the access_token.
-  string refresh_token = 2;
+  Token refresh_token = 2;
 }
 
 message RefreshAccessTokenRequest {
@@ -48,7 +58,7 @@ message RefreshAccessTokenRequest {
 
 message RefreshAccessTokenResponse {
   /// Fresh access_token.
-  string access_token = 1;
+  Token access_token = 1;
 }
 
 /// This service is responsible for issuing auth tokens to clients for API access.
