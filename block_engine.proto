@@ -62,7 +62,9 @@ message PacketBatchUpdate {
   }
 }
 
-message SubscribeExpiringPacketsResponse {}
+message StartExpiringPacketStreamResponse {
+  shared.Heartbeat heartbeat = 1;
+}
 
 /// Validators can connect to Block Engines to receive packets and bundles.
 service BlockEngineValidator {
@@ -84,6 +86,9 @@ service BlockEngineRelayer {
   rpc SubscribeAccountsOfInterest (AccountsOfInterestRequest) returns (stream AccountsOfInterestUpdate) {}
 
   // Validators can subscribe to packets from the relayer and receive a multiplexed signal that contains a mixture
-  // of packets and heartbeats
-  rpc StartExpiringPacketStream (stream PacketBatchUpdate) returns (SubscribeExpiringPacketsResponse) {}
+  // of packets and heartbeats.
+  // NOTE: This is a bi-directional stream due to a bug with how Envoy handles half closed client-side streams.
+  // The issue is being tracked here: https://github.com/envoyproxy/envoy/issues/22748. In the meantime, the
+  // server will stream heartbeats to clients at some reasonable cadence.
+  rpc StartExpiringPacketStream (stream PacketBatchUpdate) returns (stream StartExpiringPacketStreamResponse) {}
 }
