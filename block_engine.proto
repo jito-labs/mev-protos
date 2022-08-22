@@ -6,12 +6,6 @@ import "bundle.proto";
 
 package block_engine;
 
-message GetTpuConfigsRequest {}
-message GetTpuConfigsResponse {
-  shared.Socket tpu = 1;
-  shared.Socket tpu_forward = 2;
-}
-
 message SubscribePacketsRequest {}
 message SubscribePacketsResponse {
   shared.Header header = 1;
@@ -73,9 +67,6 @@ service BlockEngineValidator {
 
   /// Validators can subscribe to the block engine to receive a stream of simulated and profitable bundles
   rpc SubscribeBundles (SubscribeBundlesRequest) returns (stream SubscribeBundlesResponse) {}
-
-  // The block engine can also act as a relayer
-  rpc GetTpuConfigs (GetTpuConfigsRequest) returns (GetTpuConfigsResponse) {}
 }
 
 /// Relayers can forward packets to Block Engines.
