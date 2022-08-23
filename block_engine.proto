@@ -9,10 +9,7 @@ package block_engine;
 message SubscribePacketsRequest {}
 message SubscribePacketsResponse {
   shared.Header header = 1;
-  oneof msg {
-    packet.PacketBatch batch = 2;
-    shared.Heartbeat heartbeat = 3;
-  }
+  packet.PacketBatch batch = 2;
 }
 
 message SubscribeBundlesRequest {}
