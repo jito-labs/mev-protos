@@ -39,6 +39,7 @@ message ExpiringPacketBatch {
   shared.Header header = 1;
   packet.PacketBatch batch = 2;
   uint32 expiry_ms = 3;
+  string traceparent = 4;
 }
 
 // Packets and heartbeats are sent over the same stream.

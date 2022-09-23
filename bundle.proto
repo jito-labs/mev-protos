@@ -13,4 +13,5 @@ message Bundle {
 message BundleUuid {
   bundle.Bundle bundle = 1;
   string uuid = 2;
+  string traceparent = 3;
 }
