@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package admin;
+
+
+import "google/protobuf/timestamp.proto";
+
+message SlotList {
+  repeated uint64 slots = 1;
+}
+
+message ConnectedLeadersRequest {}
+
+message ConnectedLeadersResponse {
+  map<string, SlotList> connected_validators = 1;
+}
+
+message KillSwitchRequest {
+  bool stop = 1;
+}
+
+message KillSwitchResponse {}
+
+service SearcherService {
+   // Returns information on connected leader slots
+  rpc GetConnectedLeaders (ConnectedLeadersRequest) returns (ConnectedLeadersResponse) {}
+
+  rpc BundleKillSwitch (KillSwitchRequest) returns (KillSwitchResponse) {}
+}
