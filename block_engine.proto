@@ -17,6 +17,15 @@ message SubscribeBundlesResponse {
   repeated bundle.BundleUuid bundles = 1;
 }
 
+message BlockBuilderFeeInfoRequest {}
+message BlockBuilderFeeInfoResponse {
+  string pubkey = 1;
+
+  // fee as a fraction
+  uint64 numerator = 2;
+  uint64 denominator = 3;
+}
+
 message AccountsOfInterest {
   // use * for all accounts
   repeated string accounts = 1;
@@ -79,4 +88,7 @@ service BlockEngineRelayer {
   // The issue is being tracked here: https://github.com/envoyproxy/envoy/issues/22748. In the meantime, the
   // server will stream heartbeats to clients at some reasonable cadence.
   rpc StartExpiringPacketStream (stream PacketBatchUpdate) returns (stream StartExpiringPacketStreamResponse) {}
+
+  // Block builders can optionally collect fees. This returns teh
+  rpc GetBlockBuilderFeeInfo (BlockBuilderFeeInfoRequest) returns (BlockBuilderFeeInfoResponse) {}
 }
