@@ -89,6 +89,7 @@ service BlockEngineRelayer {
   // server will stream heartbeats to clients at some reasonable cadence.
   rpc StartExpiringPacketStream (stream PacketBatchUpdate) returns (stream StartExpiringPacketStreamResponse) {}
 
-  // Block builders can optionally collect fees. This returns teh
+  // Block builders can optionally collect fees. This returns fee information if a block builder wants to
+  // collect one.
   rpc GetBlockBuilderFeeInfo (BlockBuilderFeeInfoRequest) returns (BlockBuilderFeeInfoResponse) {}
 }
