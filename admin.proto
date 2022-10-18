@@ -25,5 +25,9 @@ service SearcherService {
    // Returns information on connected leader slots
   rpc GetConnectedLeaders (ConnectedLeadersRequest) returns (ConnectedLeadersResponse) {}
 
+  // Turns off/on bundle stream
   rpc BundleKillSwitch (KillSwitchRequest) returns (KillSwitchResponse) {}
+
+  // Closes/Opens all validator connections
+  rpc ValidatorKillSwitch (KillSwitchRequest) returns (KillSwitchResponse) {}
 }
