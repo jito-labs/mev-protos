@@ -81,8 +81,9 @@ service BlockEngineValidator {
 /// Relayers can forward packets to Block Engines.
 /// Block Engines provide an AccountsOfInterest field to only send transactions that are of interest.
 service BlockEngineRelayer {
-  /// Relayers subscribe to a stream that contains a set of accounts they're interested in getting transactions for.
-  /// They receive periodic updates for those accounts
+  /// The block engine feeds accounts of interest (AOI) updates to the relayer periodically.
+  /// For all transactions the relayer receives, it forwards transactions to the block engine which write-lock
+  /// any of the accounts in the AOI.
   rpc SubscribeAccountsOfInterest (AccountsOfInterestRequest) returns (stream AccountsOfInterestUpdate) {}
 
   // Validators can subscribe to packets from the relayer and receive a multiplexed signal that contains a mixture
