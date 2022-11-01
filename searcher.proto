@@ -21,7 +21,8 @@ message SendBundleResponse {
 }
 
 message PendingTxSubscriptionRequest {
-  // list of accounts to subscribe to (can be data or program accounts)
+  // list of accounts to subscribe to
+  // NOTE: the block-engine will only forward transactions that write lock the provided accounts here.
   repeated string accounts = 1;
 }
 
@@ -58,11 +59,10 @@ message GetTipAccountsResponse {
 }
 
 service SearcherService {
-  // RPC endpoint to subscribe to pending transactions.
-  // Client calls SubscribePendingTransactions with a list of public keys base58 formatted they are
-  // interested in subscribing to.
-  // Steams updates on pending transactions to client.
+  // RPC endpoint to subscribe to pending transactions. Clients can provide a list of base58 encoded accounts.
+  // Any transactions that write-lock the provided accounts will be streamed to the searcher.
   rpc SubscribePendingTransactions (PendingTxSubscriptionRequest) returns (stream PendingTxNotification) {}
+
   rpc SendBundle (SendBundleRequest) returns (SendBundleResponse) {}
 
   // Returns the next scheduled leader connected to the block engine.
