@@ -5,6 +5,7 @@ package searcher;
 import "bundle.proto";
 import "packet.proto";
 
+import "google/protobuf/empty.proto";
 import "google/protobuf/timestamp.proto";
 
 message SlotList {
@@ -58,7 +59,13 @@ message GetTipAccountsResponse {
   repeated string accounts = 1;
 }
 
+message SubscribeBundleResultsRequest {}
+
 service SearcherService {
+  // Searchers can invoke this endpoint to subscribe to their respective bundle results.
+  // A success result would indicate the bundle won its state auction and was submitted to the validator.
+  rpc SubscribeBundleResults (SubscribeBundleResultsRequest) returns (stream bundle.BundleResult) {}
+
   // RPC endpoint to subscribe to pending transactions. Clients can provide a list of base58 encoded accounts.
   // Any transactions that write-lock the provided accounts will be streamed to the searcher.
   rpc SubscribePendingTransactions (PendingTxSubscriptionRequest) returns (stream PendingTxNotification) {}

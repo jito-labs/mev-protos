@@ -14,3 +14,66 @@ message BundleUuid {
   bundle.Bundle bundle = 1;
   string uuid = 2;
 }
+
+/* Bundle Result Types */
+
+// Indicates the bundle was accepted and forwarded to a validator.
+// NOTE: A single bundle may have multiple events emitted if forwarded to many validators.
+message Accepted {
+  // Slot at which bundle was forwarded.
+  uint64 slot = 1;
+
+  // Validator identity bundle was forwarded to.
+  string validator_identity = 2;
+}
+
+// Indicates the bundle was dropped and therefore not forwarded to any validator.
+message Rejected {
+  oneof reason {
+    StateAuctionBidRejected state_auction_bid_rejected = 1;
+    WinningBatchBidRejected winning_batch_bid_rejected = 2;
+    SimulationFailure simulation_failure = 3;
+    InternalError internal_error = 4;
+  }
+}
+
+// Indicates the bundle's bid was high enough to win its state auction.
+// However, not high enough relative to other state auction winners and therefore excluded from being forwarded.
+message WinningBatchBidRejected {
+  // Auction's unique identifier.
+  string auction_id = 1;
+
+  // Bundle's simulated bid.
+  uint64 simulated_bid_lamports = 2;
+}
+
+// Indicates the bundle's bid was __not__ high enough to be included in its state auction's set of winners.
+message StateAuctionBidRejected {
+  // Auction's unique identifier.
+  string auction_id = 1;
+
+  // Bundle's simulated bid.
+  uint64 simulated_bid_lamports = 2;
+}
+
+// Bundle dropped due to simulation failure.
+message SimulationFailure {
+  // Signature of the offending transaction.
+  string tx_signature = 1;
+  optional string msg = 2;
+}
+
+// Bundle dropped due to an internal error.
+message InternalError {
+  string msg = 1;
+}
+
+message BundleResult {
+  // Bundle's Uuid.
+  string bundle_id = 1;
+
+  oneof result {
+    bundle.Accepted accepted = 2;
+    bundle.Rejected rejected = 3;
+  }
+}
