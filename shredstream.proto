@@ -18,5 +18,3 @@ service Shredstream {
   // RPC endpoint to send heartbeats to keep shreds flowing
   rpc RefreshShredstreamSubscriber (stream Heartbeat) returns (google.protobuf.Empty) {}
 }
-
-
