@@ -8,10 +8,10 @@ import "shared.proto";
 // Reference: https://www.notion.so/jito/ShredStream-Proxy-0e06fbe9127843bb9df940e7cb183279
 
 message Heartbeat {
-  // dont trust IP:PORT from tcp header since it can be tampered over the wire
+  // don't trust IP:PORT from tcp header since it can be tampered over the wire
   // this also prevents spamming an unwitting destination
   shared.Socket socket = 1;
-  string auth_token = 2; // jwt contents below
+  string auth_token = 2;
 }
 
 service Shredstream {
