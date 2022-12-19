@@ -6,7 +6,7 @@ import "shared.proto";
 
 message Heartbeat {
   // don't trust IP:PORT from tcp header since it can be tampered over the wire
-  // this also prevents spamming an unwitting destination
+  // `socket` must match incoming packet's ip:port. this prevents spamming an unwitting destination
   shared.Socket socket = 1;
 }
 
@@ -15,5 +15,5 @@ message HeartbeatResponse {}
 
 service Shredstream {
   // RPC endpoint to send heartbeats to keep shreds flowing
-  rpc RefreshShredstreamSubscriber (stream Heartbeat) returns (stream HeartbeatResponse) {}
+  rpc SendHeartbeat (stream Heartbeat) returns (HeartbeatResponse) {}
 }
