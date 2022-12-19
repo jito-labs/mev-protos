@@ -2,17 +2,18 @@ syntax = "proto3";
 
 package shredstream;
 
-import "google/protobuf/empty.proto";
 import "shared.proto";
 
 message Heartbeat {
   // don't trust IP:PORT from tcp header since it can be tampered over the wire
   // this also prevents spamming an unwitting destination
   shared.Socket socket = 1;
-  string auth_token = 2;
 }
+
+// placeholder for future returned values
+message HeartbeatResponse {}
 
 service Shredstream {
   // RPC endpoint to send heartbeats to keep shreds flowing
-  rpc RefreshShredstreamSubscriber (stream Heartbeat) returns (google.protobuf.Empty) {}
+  rpc RefreshShredstreamSubscriber (stream Heartbeat) returns (stream HeartbeatResponse) {}
 }
