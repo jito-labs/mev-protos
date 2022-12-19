@@ -10,8 +10,9 @@ message Heartbeat {
   shared.Socket socket = 1;
 }
 
-// placeholder for future returned values
-message HeartbeatResponse {}
+message HeartbeatResponse {
+  uint32 ttl_ms = 1;
+}
 
 service Shredstream {
   // RPC endpoint to send heartbeats to keep shreds flowing
