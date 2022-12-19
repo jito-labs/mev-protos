@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package shredstream;
+
+import "shared.proto";
+
+message Heartbeat {
+  // don't trust IP:PORT from tcp header since it can be tampered over the wire
+  // `socket.ip` must match incoming packet's ip. this prevents spamming an unwitting destination
+  shared.Socket socket = 1;
+}
+
+message HeartbeatResponse {
+  uint32 ttl_ms = 1;
+}
+
+service Shredstream {
+  // RPC endpoint to send heartbeats to keep shreds flowing
+  rpc SendHeartbeat (stream Heartbeat) returns (HeartbeatResponse) {}
+}
