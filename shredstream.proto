@@ -6,7 +6,7 @@ import "shared.proto";
 
 message Heartbeat {
   // don't trust IP:PORT from tcp header since it can be tampered over the wire
-  // `socket` must match incoming packet's ip:port. this prevents spamming an unwitting destination
+  // `socket.ip` must match incoming packet's ip. this prevents spamming an unwitting destination
   shared.Socket socket = 1;
 }
 
