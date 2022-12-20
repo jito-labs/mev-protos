@@ -16,5 +16,5 @@ message HeartbeatResponse {
 
 service Shredstream {
   // RPC endpoint to send heartbeats to keep shreds flowing
-  rpc SendHeartbeat (stream Heartbeat) returns (HeartbeatResponse) {}
+  rpc SendHeartbeat (Heartbeat) returns (HeartbeatResponse) {}
 }
