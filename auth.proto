@@ -8,6 +8,7 @@ enum Role {
   RELAYER = 0;
   SEARCHER = 1;
   VALIDATOR = 2;
+  SHREDSTREAM_SUBSCRIBER = 3;
 }
 
 message GenerateAuthChallengeRequest {
