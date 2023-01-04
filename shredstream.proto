@@ -8,9 +8,13 @@ message Heartbeat {
   // don't trust IP:PORT from tcp header since it can be tampered over the wire
   // `socket.ip` must match incoming packet's ip. this prevents spamming an unwitting destination
   shared.Socket socket = 1;
+
+  // regions for shredstream proxy to receive shreds from
+  repeated shared.Region regions = 2;
 }
 
 message HeartbeatResponse {
+  // client must respond within `ttl_ms` to keep stream alive
   uint32 ttl_ms = 1;
 }
 
