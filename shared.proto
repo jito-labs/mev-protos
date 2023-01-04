@@ -16,12 +16,3 @@ message Socket {
   string ip = 1;
   int64 port = 2;
 }
-
-enum Region {
-  AMSTERDAM = 0;
-  DALLAS = 1;
-  FRANKFURT = 2;
-  LA = 3;
-  NY = 4;
-  TOKYO = 5;
-}
