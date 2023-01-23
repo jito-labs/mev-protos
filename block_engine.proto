@@ -32,11 +32,7 @@ message AccountsOfInterest {
 
 message AccountsOfInterestRequest {}
 message AccountsOfInterestUpdate {
-  oneof msg {
-    AccountsOfInterest add = 1;
-    AccountsOfInterest remove = 2;
-    AccountsOfInterest overwrite = 3;
-  }
+  repeated string accounts = 1;
 }
 
 // A series of packets with an expiration attached to them.
