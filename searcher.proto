@@ -25,7 +25,7 @@ message ProgramSubscriptionV0 {
 }
 
 message WriteLockedAccountSubscriptionV0 {
-  repeated string programs = 1;
+  repeated string accounts = 1;
 }
 
 message MempoolSubscription {
