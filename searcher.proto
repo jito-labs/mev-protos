@@ -20,6 +20,22 @@ message SendBundleResponse {
   string uuid = 1;
 }
 
+message ProgramSubscriptionV0 {
+  repeated string programs = 1;
+}
+
+message WriteLockedAccountSubscriptionV0 {
+  repeated string programs = 1;
+}
+
+message MempoolSubscription {
+  oneof msg {
+    ProgramSubscriptionV0 program_v0_sub = 1;
+    WriteLockedAccountSubscriptionV0 wla_v0_sub = 2;
+  }
+  // NOTE: do not add any fields after this
+}
+
 message PendingTxSubscriptionRequest {
   // list of accounts to subscribe to
   // NOTE: the block-engine will only forward transactions that write lock the provided accounts here.
@@ -72,10 +88,11 @@ service SearcherService {
 
   // RPC endpoint to subscribe to pending transactions. Clients can provide a list of base58 encoded accounts.
   // Any transactions that write-lock the provided accounts will be streamed to the searcher.
+  // NOTE: DEPRECATED SOON!!!
   rpc SubscribePendingTransactions (PendingTxSubscriptionRequest) returns (stream PendingTxNotification) {}
 
-  // RPC endpoint to subscribe to pending transactions by program IDs
-  rpc SubscribePendingTransactionsByProgramId (PendingTransactionsByProgramIdRequest) returns (stream PendingTxNotification) {}
+  // RPC endpoint to subscribe to mempool based on a few filters
+  rpc SubscribeMempool (MempoolSubscription) returns (stream PendingTxNotification) {}
 
   rpc SendBundle (SendBundleRequest) returns (SendBundleResponse) {}
 
