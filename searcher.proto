@@ -26,6 +26,11 @@ message PendingTxSubscriptionRequest {
   repeated string accounts = 1;
 }
 
+message PendingTransactionsByProgramIdRequest {
+  // list of programs to subscribe to
+  repeated string programs = 1;
+}
+
 message PendingTxNotification {
   // server-side timestamp the transactions were generated at (for debugging/profiling purposes)
   google.protobuf.Timestamp server_side_ts = 1;
@@ -68,6 +73,9 @@ service SearcherService {
   // RPC endpoint to subscribe to pending transactions. Clients can provide a list of base58 encoded accounts.
   // Any transactions that write-lock the provided accounts will be streamed to the searcher.
   rpc SubscribePendingTransactions (PendingTxSubscriptionRequest) returns (stream PendingTxNotification) {}
+
+  // RPC endpoint to subscribe to pending transactions by program IDs
+  rpc SubscribePendingTransactionsByProgramId (PendingTransactionsByProgramIdRequest) returns (stream PendingTxNotification) {}
 
   rpc SendBundle (SendBundleRequest) returns (SendBundleResponse) {}
 
