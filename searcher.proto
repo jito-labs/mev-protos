@@ -42,11 +42,6 @@ message PendingTxSubscriptionRequest {
   repeated string accounts = 1;
 }
 
-message PendingTransactionsByProgramIdRequest {
-  // list of programs to subscribe to
-  repeated string programs = 1;
-}
-
 message PendingTxNotification {
   // server-side timestamp the transactions were generated at (for debugging/profiling purposes)
   google.protobuf.Timestamp server_side_ts = 1;
