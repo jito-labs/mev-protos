@@ -34,7 +34,7 @@ message Rejected {
     WinningBatchBidRejected winning_batch_bid_rejected = 2;
     SimulationFailure simulation_failure = 3;
     InternalError internal_error = 4;
-    NoLeader no_leader = 5;
+    DroppedBundle dropped_bundle = 5;
   }
 }
 
@@ -69,8 +69,8 @@ message InternalError {
   string msg = 1;
 }
 
-// Bundle dropped because no leader upcoming
-message NoLeader {
+// Bundle dropped (e.g. because no leader upcoming)
+message DroppedBundle {
   string msg = 1;
 }
 
