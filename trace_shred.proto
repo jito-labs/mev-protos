@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package trace_shred;
+
+import "google/protobuf/timestamp.proto";
+
+message TraceShred {
+  // timestamp of creation
+  google.protobuf.Timestamp created_at = 1;
+  // source region, one of: https://jito-labs.gitbook.io/mev/systems/connecting/mainnet
+  string region = 2;
+  // monotonically increases, resets upon service restart
+  uint32 seq_num = 3;
+}
+
