@@ -74,12 +74,32 @@ message DroppedBundle {
   string msg = 1;
 }
 
+message Finalized {}
+message Processed {
+  string validator_identity = 1;
+  uint64 slot = 2;
+  /// Index within the block.
+  uint64 bundle_index = 3;
+}
+message Dropped {
+  DroppedReason reason = 1;
+}
+enum DroppedReason {
+  BlockhashExpired = 0;
+  // One or more transactions in the bundle landed on-chain, invalidating the bundle.
+  PartiallyProcessed = 1;
+  NotFinalized = 2;
+}
+
 message BundleResult {
   // Bundle's Uuid.
   string bundle_id = 1;
 
   oneof result {
-    bundle.Accepted accepted = 2;
-    bundle.Rejected rejected = 3;
+    Accepted accepted = 2;
+    Rejected rejected = 3;
+    Finalized finalized = 4;
+    Processed processed = 5;
+    Dropped dropped = 6;
   }
 }
