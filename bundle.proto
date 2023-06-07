@@ -96,10 +96,15 @@ message BundleResult {
   string bundle_id = 1;
 
   oneof result {
+    // Indicated accepted by the block-engine and forwarded to a jito-solana validator.
     Accepted accepted = 2;
+    // Rejected by the block-engine.
     Rejected rejected = 3;
+    // Reached finalized commitment level.
     Finalized finalized = 4;
+    // Reached a processed commitment level.
     Processed processed = 5;
+    // Was accepted and forwarded by the block-engine but never landed on-chain.
     Dropped dropped = 6;
   }
 }
