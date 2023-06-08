@@ -30,7 +30,7 @@ message ProgramSubscriptionV0 {
 }
 
 message WriteLockedAccountSubscriptionV0 {
-  // Base58 encoded pubkey that transactions mention
+  // Base58 encoded account pubkey that transactions mention
   repeated string accounts = 1;
 
   // Regions to subscribe to
@@ -39,7 +39,7 @@ message WriteLockedAccountSubscriptionV0 {
 }
 
 message MempoolSubscription {
-  // type of transaction to subscribe to
+  // Filter by program id or account pubkey
   oneof msg {
     ProgramSubscriptionV0 program_v0_sub = 1;
     WriteLockedAccountSubscriptionV0 wla_v0_sub = 2;
