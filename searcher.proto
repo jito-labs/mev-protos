@@ -35,7 +35,7 @@ message MempoolSubscription {
   oneof msg {
     ProgramSubscriptionV0 program_v0_sub = 1;
     WriteLockedAccountSubscriptionV0 wla_v0_sub = 2;
-    /// ids up to (incl) 9 are valid
+    /// protobuf field id upto (and incl) 9 are valid
   }
 
   // Filters transactions to originate from specified regions.
