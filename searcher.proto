@@ -40,7 +40,7 @@ message MempoolSubscription {
 
   // Filters transactions to originate from specified regions.
   // Defaults to the currently connected region.
-  repeated string subscribed_regions = 10;
+  repeated string regions = 10;
 }
 
 message PendingTxSubscriptionRequest {
