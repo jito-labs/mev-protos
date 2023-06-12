@@ -88,6 +88,7 @@ enum DroppedReason {
   BlockhashExpired = 0;
   // One or more transactions in the bundle landed on-chain, invalidating the bundle.
   PartiallyProcessed = 1;
+  // This indicates bundle was processed but not finalized. This could occur during forks.
   NotFinalized = 2;
 }
 
