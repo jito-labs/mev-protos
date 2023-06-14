@@ -21,26 +21,19 @@ message SendBundleResponse {
 }
 
 message ProgramSubscriptionV0 {
-  // Base58 encoded program id that transactions mention
   repeated string programs = 1;
 }
 
 message WriteLockedAccountSubscriptionV0 {
-  // Base58 encoded account pubkey that transactions mention
   repeated string accounts = 1;
 }
 
 message MempoolSubscription {
-  // Filter by program id or account pubkey
   oneof msg {
     ProgramSubscriptionV0 program_v0_sub = 1;
     WriteLockedAccountSubscriptionV0 wla_v0_sub = 2;
-    /// field numbers upto (and incl) 9 are reserved
   }
-
-  // Filters transactions to originate from specified regions.
-  // Defaults to the currently connected region.
-  repeated string regions = 10;
+  // NOTE: do not add any fields after this
 }
 
 message PendingTxSubscriptionRequest {
@@ -83,16 +76,6 @@ message GetTipAccountsResponse {
 
 message SubscribeBundleResultsRequest {}
 
-message GetRegionRequest {}
-message GetRegionResponse {
-  // The region the client is currently connected to
-  string current_region = 1;
-
-  // Regions that are online and ready for connections
-  // All regions: https://jito-labs.gitbook.io/mev/systems/connecting/mainnet
-  repeated string available_regions = 2;
-}
-
 service SearcherService {
   // Searchers can invoke this endpoint to subscribe to their respective bundle results.
   // A success result would indicate the bundle won its state auction and was submitted to the validator.
@@ -116,7 +99,4 @@ service SearcherService {
 
   // Returns the tip accounts searchers shall transfer funds to for the leader to claim.
   rpc GetTipAccounts (GetTipAccountsRequest) returns (GetTipAccountsResponse) {}
-
-  // Returns region the client is directly connected to, along with all available regions
-  rpc GetRegion (GetRegionRequest) returns (GetRegionResponse) {}
 }
