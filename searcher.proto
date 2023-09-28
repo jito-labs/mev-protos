@@ -83,8 +83,8 @@ message GetTipAccountsResponse {
 
 message SubscribeBundleResultsRequest {}
 
-message GetRegionRequest {}
-message GetRegionResponse {
+message GetRegionsRequest {}
+message GetRegionsResponse {
   // The region the client is currently connected to
   string current_region = 1;
 
@@ -118,5 +118,5 @@ service SearcherService {
   rpc GetTipAccounts (GetTipAccountsRequest) returns (GetTipAccountsResponse) {}
 
   // Returns region the client is directly connected to, along with all available regions
-  rpc GetRegion (GetRegionRequest) returns (GetRegionResponse) {}
+  rpc GetRegions (GetRegionsRequest) returns (GetRegionsResponse) {}
 }
