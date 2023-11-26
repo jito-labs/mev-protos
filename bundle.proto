@@ -38,22 +38,24 @@ message ForwardedToValidator {
 // Indicates the bundle was dropped and therefore not forwarded to any validator.
 message Rejected {
   oneof reason {
+    // The bundle did not win the auction it was being considered in.
     StateAuctionBidRejected state_auction_bid_rejected = 1;
-    WinningBatchBidRejected winning_batch_bid_rejected = 2 [deprecated = true];
-    SimulationFailure simulation_failure = 3;
-    InternalError internal_error = 4;
-    DroppedBundle dropped_bundle = 5 [deprecated = true];
-    string other = 6;
-  }
-}
 
-// Indicates the bundle was dropped and therefore not forwarded to any validator.
-message RejectedV1 {
-  oneof reason {
-    StateAuctionBidRejected state_auction_bid_rejected = 1;
-    SimulationFailure simulation_failure = 2;
-    InternalError internal_error = 3;
-    string other = 4;
+    // Deprecated, this field is no longer set by the Block-Engine.
+    WinningBatchBidRejected winning_batch_bid_rejected = 2 [deprecated = true];
+
+    // Bundle failed simulation.
+    SimulationFailure simulation_failure = 3;
+
+    // Some internal error occurred with the Block-Engine.
+    InternalError internal_error = 4;
+
+    // Indicates accepted by the block-engine and forwarded to a jito-solana validator.
+    // Deprecated, start using `other`.
+    DroppedBundle dropped_bundle = 5 [deprecated = true];
+
+    // Set to really high number so we can potentially add other fields before.
+    string other = 100;
   }
 }
 
@@ -71,9 +73,14 @@ message WinningBatchBidRejected {
 message StateAuctionBidRejected {
   // Auction's unique identifier.
   string auction_id = 1;
+
   // Bundle's simulated bid.
   uint64 simulated_bid_lamports = 2;
+
   optional string msg = 3;
+
+  // This auction's winning bundle bid.
+  uint64 winning_bundle_bid = 4;
 }
 
 // Bundle dropped due to simulation failure.
@@ -122,7 +129,7 @@ message BundleResult {
 
   oneof result {
     // Indicates accepted by the block-engine and forwarded to a jito-solana validator.
-    // Deprecated, start using forwarded_to_validator.
+    // Deprecated, start using `forwarded_to_validator`.
     Accepted accepted = 2 [deprecated = true];
 
     // Rejected by the block-engine.
@@ -137,27 +144,7 @@ message BundleResult {
     // Dropped from the mempool.
     Dropped dropped = 6;
 
+    // Bundle won an auction and was forwarded to the validator.
     ForwardedToValidator forwarded_to_validator = 7;
-  }
-}
-
-message BundleResultV1 {
-  // Bundle's Uuid.
-  string bundle_id = 1;
-
-  oneof result {
-    // Rejected by the block-engine.
-    Rejected rejected = 2;
-
-    // Reached finalized commitment level.
-    Finalized finalized = 3;
-
-    // Reached a processed commitment level.
-    Processed processed = 4;
-
-    // Was accepted and forwarded by the block-engine but never landed on-chain.
-    Dropped dropped = 5;
-
-    ForwardedToValidator forwarded_to_validator = 6;
   }
 }
