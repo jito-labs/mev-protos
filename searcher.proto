@@ -85,7 +85,11 @@ message GetTipAccountsResponse {
   repeated string accounts = 1;
 }
 
-message SubscribeBundleResultsRequest {}
+message SubscribeBundleResultsRequest {
+    option deprecated = true;
+}
+
+message SubscribeBundleStatusesRequest {}
 
 message GetRegionsRequest {}
 message GetRegionsResponse {
@@ -100,7 +104,13 @@ message GetRegionsResponse {
 service SearcherService {
   // Searchers can invoke this endpoint to subscribe to their respective bundle results.
   // A success result would indicate the bundle won its state auction and was submitted to the validator.
-  rpc SubscribeBundleResults (SubscribeBundleResultsRequest) returns (stream bundle.BundleResult) {}
+  // NOTE: Deprecated, start using `SubscribeBundleStatuses`
+  rpc SubscribeBundleResults (SubscribeBundleResultsRequest) returns (stream bundle.BundleResult) {
+    option deprecated = true;
+  }
+
+  // Use this endpoint to subscribe to your bundle statuses.
+  rpc SubscribeBundleStatuses (SubscribeBundleStatusesRequest) returns (stream bundle.BundleStatus) {}
 
   // Subscribe to mempool transactions based on a few filters
   rpc SubscribeMempool (MempoolSubscription) returns (stream PendingTxNotification) {}
