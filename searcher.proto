@@ -87,6 +87,8 @@ message GetTipAccountsResponse {
 
 message SubscribeBundleResultsRequest {}
 
+message SubscribeBundleStatusesRequest {}
+
 message GetRegionsRequest {}
 message GetRegionsResponse {
   // The region the client is currently connected to
@@ -100,7 +102,16 @@ message GetRegionsResponse {
 service SearcherService {
   // Searchers can invoke this endpoint to subscribe to their respective bundle results.
   // A success result would indicate the bundle won its state auction and was submitted to the validator.
+  // NOTE: Deprecated, start using `SubscribeBundleStatuses`
   rpc SubscribeBundleResults (SubscribeBundleResultsRequest) returns (stream bundle.BundleResult) {}
+
+  // Use this endpoint to subscribe to your bundle statuses.
+  rpc SubscribeBundleStatuses (SubscribeBundleStatusesRequest) returns (stream bundle.BundleStatus) {}
+
+  // RPC endpoint to subscribe to pending transactions. Clients can provide a list of base58 encoded accounts.
+  // Any transactions that write-lock the provided accounts will be streamed to the searcher.
+  // NOTE: DEPRECATED SOON!!!
+  rpc SubscribePendingTransactions (PendingTxSubscriptionRequest) returns (stream PendingTxNotification) {}
 
   // Subscribe to mempool transactions based on a few filters
   rpc SubscribeMempool (MempoolSubscription) returns (stream PendingTxNotification) {}

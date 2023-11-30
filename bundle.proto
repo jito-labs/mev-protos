@@ -57,11 +57,16 @@ message StateAuctionBidRejected {
   optional string msg = 3;
 }
 
-// Bundle dropped due to simulation failure.
+// Bundle failed validation due to simulation failure.
 message SimulationFailure {
   // Signature of the offending transaction.
   string tx_signature = 1;
+
+  // Optional error log.
   optional string msg = 2;
+
+  // Failed transaction index within the bundle.
+  uint64 tx_index = 3;
 }
 
 // Bundle dropped due to an internal error.
@@ -74,8 +79,8 @@ message DroppedBundle {
   string msg = 1;
 }
 
-message Finalized {}
-message Processed {
+message FinalizedLegacy {}
+message ProcessedLegacy {
   string validator_identity = 1;
   uint64 slot = 2;
   /// Index within the block.
@@ -102,10 +107,88 @@ message BundleResult {
     // Rejected by the block-engine.
     Rejected rejected = 3;
     // Reached finalized commitment level.
-    Finalized finalized = 4;
+    FinalizedLegacy finalized = 4;
     // Reached a processed commitment level.
-    Processed processed = 5;
+    ProcessedLegacy processed = 5;
     // Was accepted and forwarded by the block-engine but never landed on-chain.
     Dropped dropped = 6;
+  }
+}
+
+/** BundleStatus types */
+
+enum CommitmentLevel {
+  Processed = 0;
+  Confirmed = 1;
+  Finalized = 2;
+}
+message LandedInBlock {
+  string validator_identity = 1;
+  uint64 slot = 2;
+  uint64 bundle_start_index = 3;
+  uint64 bundle_end_index = 4;
+  CommitmentLevel commitment_level = 5;
+}
+
+// Indicates the bundle won an auction and was forwarded to validators.
+message ForwardedToValidator {
+  // Point in time at which the bundle was forwarded.
+  uint64 slot_forwarded_at = 1;
+
+  // Validators for which this bundle was forwarded to.
+  repeated string validators = 2;
+}
+
+// Bundle expired and pruned from mempool.
+message ExpiredAndPruned {
+  // Bundle expirations are determined by the transaction with the oldest blockhash.
+  string expired_signature = 1;
+
+  // The slot this blockhash was checked at.
+  uint64 slot_checked_at = 2;
+
+  // The expiration slot of the blockhash.
+  uint64 slot_expired_at = 3;
+}
+
+// Bundle contains transactions that have already processed on-chain.
+message ContainsAlreadyProcessedSignatures {
+  repeated string signatures = 1;
+}
+
+message Outbid {
+  // The highest bidding bundle in the auction.
+  uint64 highest_auction_bid = 1;
+
+  // Indicates whether the bundle was pruned from the mempool.
+  // e.g.
+  //  If a bundle in the batch that won the auction would invalidate this bundle then it would be pruned.
+  //  However, if this bundle was excluded from forwarding because the total forwarded bundles during the
+  //  auction window would exceed the limit, then it would be kept around in the mempool for subsequent auctions.
+  bool pruned_from_mempool = 2;
+}
+
+message BundleStatus {
+  // Bundle's Uuid.
+  string bundle_id = 1;
+
+  // Mempool region this notification came from.
+  string mempool_region = 2;
+
+  oneof result {
+    // Bundle was forwarded to validators.
+    ForwardedToValidator forwarded_to_validator = 3;
+
+    // Bundle failed simulation against the latest state of the chain.
+    SimulationFailure simulation_failure = 4;
+
+    // Bundle executed successfully and landed in a block.
+    LandedInBlock landed_in_block = 5;
+
+    // Bundle was out bid in an auction.
+    Outbid outbid = 7;
+
+    // Bundle expired and was pruned from the mempool.
+    ExpiredAndPruned expired_and_pruned = 8;
   }
 }
