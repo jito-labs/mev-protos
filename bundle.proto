@@ -64,9 +64,6 @@ message SimulationFailure {
 
   // Optional error log.
   optional string msg = 2;
-
-  // Failed transaction index within the bundle.
-  uint64 tx_index = 3;
 }
 
 // Bundle dropped due to an internal error.
