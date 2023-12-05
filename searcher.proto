@@ -12,6 +12,7 @@ message SlotList {
 }
 
 message ConnectedLeadersResponse {
+  // Mapping of validator pubkey to leader slots for the current epoch.
   map<string /* validator pubkey */ , SlotList> connected_validators = 1;
 }
 
@@ -76,6 +77,7 @@ message NextScheduledLeaderResponse {
 message ConnectedLeadersRequest {}
 
 message ConnectedLeadersRegionedRequest {
+  // Defaults to the currently connected region if no region provided.
   repeated string regions = 1;
 }
 message ConnectedLeadersRegionedResponse {
@@ -122,7 +124,7 @@ service SearcherService {
   // Returns leader slots for connected jito validators during the current epoch. Only returns data for this region.
   rpc GetConnectedLeaders (ConnectedLeadersRequest) returns (ConnectedLeadersResponse) {}
 
-  // Returns leader slots for connected jito validators during the current epoch. Defaults to the currently connected region if no region provided.
+  // Returns leader slots for connected jito validators during the current epoch.
   rpc GetConnectedLeadersRegioned (ConnectedLeadersRegionedRequest) returns (ConnectedLeadersRegionedResponse) {}
 
   // Returns the tip accounts searchers shall transfer funds to for the leader to claim.
