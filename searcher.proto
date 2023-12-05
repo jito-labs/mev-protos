@@ -11,6 +11,10 @@ message SlotList {
   repeated uint64 slots = 1;
 }
 
+message ConnectedLeadersResponse {
+  map<string /* validator pubkey */ , SlotList> connected_validators = 1;
+}
+
 message SendBundleRequest {
   bundle.Bundle bundle = 1;
 }
@@ -71,9 +75,13 @@ message NextScheduledLeaderResponse {
 
 message ConnectedLeadersRequest {}
 
-message ConnectedLeadersResponse {
-  map<string, SlotList> connected_validators = 1;
+message ConnectedLeadersRegionedRequest {
+  repeated string regions = 1;
 }
+message ConnectedLeadersRegionedResponse {
+  map<string /* region */ , ConnectedLeadersResponse> connected_validators = 1;
+}
+
 
 message GetTipAccountsRequest {}
 
@@ -111,8 +119,11 @@ service SearcherService {
   // Returns the next scheduled leader connected to the block engine.
   rpc GetNextScheduledLeader (NextScheduledLeaderRequest) returns (NextScheduledLeaderResponse) {}
 
-  // Returns information on connected leader slots
+  // Returns leader slots for connected jito validators during the current epoch. Only returns data for this region.
   rpc GetConnectedLeaders (ConnectedLeadersRequest) returns (ConnectedLeadersResponse) {}
+
+  // Returns leader slots for connected jito validators during the current epoch. Defaults to the currently connected region if no region provided.
+  rpc GetConnectedLeadersRegioned (ConnectedLeadersRegionedRequest) returns (ConnectedLeadersRegionedResponse) {}
 
   // Returns the tip accounts searchers shall transfer funds to for the leader to claim.
   rpc GetTipAccounts (GetTipAccountsRequest) returns (GetTipAccountsResponse) {}
