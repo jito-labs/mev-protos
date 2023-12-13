@@ -187,5 +187,8 @@ message BundleStatus {
 
     // Bundle expired and was pruned from the mempool.
     ExpiredAndPruned expired_and_pruned = 8;
+
+    // Some unknown, internal error occurred.
+    InternalError internal_error = 100;
   }
 }
