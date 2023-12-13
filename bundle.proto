@@ -131,9 +131,6 @@ message LandedInBlock {
 message ForwardedToValidator {
   // Point in time at which the bundle was forwarded.
   uint64 slot_forwarded_at = 1;
-
-  // Validators for which this bundle was forwarded to.
-  repeated string validators = 2;
 }
 
 // Bundle expired and pruned from mempool.
