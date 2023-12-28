@@ -48,12 +48,6 @@ message MempoolSubscription {
   repeated string regions = 10;
 }
 
-message PendingTxSubscriptionRequest {
-  // list of accounts to subscribe to
-  // NOTE: the block-engine will only forward transactions that write lock the provided accounts here.
-  repeated string accounts = 1;
-}
-
 message PendingTxNotification {
   // server-side timestamp the transactions were generated at (for debugging/profiling purposes)
   google.protobuf.Timestamp server_side_ts = 1;
@@ -108,12 +102,7 @@ service SearcherService {
   // A success result would indicate the bundle won its state auction and was submitted to the validator.
   rpc SubscribeBundleResults (SubscribeBundleResultsRequest) returns (stream bundle.BundleResult) {}
 
-  // RPC endpoint to subscribe to pending transactions. Clients can provide a list of base58 encoded accounts.
-  // Any transactions that write-lock the provided accounts will be streamed to the searcher.
-  // NOTE: DEPRECATED SOON!!!
-  rpc SubscribePendingTransactions (PendingTxSubscriptionRequest) returns (stream PendingTxNotification) {}
-
-  // RPC endpoint to subscribe to mempool based on a few filters
+  // Subscribe to mempool transactions based on a few filters
   rpc SubscribeMempool (MempoolSubscription) returns (stream PendingTxNotification) {}
 
   rpc SendBundle (SendBundleRequest) returns (SendBundleResponse) {}
