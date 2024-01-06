@@ -45,7 +45,7 @@ message WinningBatchBidRejected {
   string auction_id = 1;
   // Bundle's simulated bid.
   uint64 simulated_bid_lamports = 2;
-  optional string msg = 3;
+  string msg = 3;
 }
 
 // Indicates the bundle's bid was __not__ high enough to be included in its state auction's set of winners.
@@ -54,14 +54,14 @@ message StateAuctionBidRejected {
   string auction_id = 1;
   // Bundle's simulated bid.
   uint64 simulated_bid_lamports = 2;
-  optional string msg = 3;
+  string msg = 3;
 }
 
 // Bundle dropped due to simulation failure.
 message SimulationFailure {
   // Signature of the offending transaction.
   string tx_signature = 1;
-  optional string msg = 2;
+  string msg = 2;
 }
 
 // Bundle dropped due to an internal error.
