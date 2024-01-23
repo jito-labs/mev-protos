@@ -76,8 +76,8 @@ message DroppedBundle {
   string msg = 1;
 }
 
-message FinalizedLegacy {}
-message ProcessedLegacy {
+message Finalized {}
+message Processed {
   string validator_identity = 1;
   uint64 slot = 2;
   /// Index within the block.
@@ -104,27 +104,12 @@ message BundleResult {
     // Rejected by the block-engine.
     Rejected rejected = 3;
     // Reached finalized commitment level.
-    FinalizedLegacy finalized = 4;
+    Finalized finalized = 4;
     // Reached a processed commitment level.
-    ProcessedLegacy processed = 5;
+    Processed processed = 5;
     // Was accepted and forwarded by the block-engine but never landed on-chain.
     Dropped dropped = 6;
   }
-}
-
-/** BundleStatus types */
-
-enum CommitmentLevel {
-  Processed = 0;
-  Confirmed = 1;
-  Finalized = 2;
-}
-message LandedInBlock {
-  string validator_identity = 1;
-  uint64 slot = 2;
-  uint64 bundle_start_index = 3;
-  uint64 bundle_end_index = 4;
-  CommitmentLevel commitment_level = 5;
 }
 
 // Indicates the bundle won an auction and was forwarded to validators.
@@ -176,14 +161,11 @@ message BundleStatus {
     // Bundle failed simulation against the latest state of the chain.
     SimulationFailure simulation_failure = 4;
 
-    // Bundle executed successfully and landed in a block.
-    LandedInBlock landed_in_block = 5;
-
     // Bundle was out bid in an auction.
-    Outbid outbid = 7;
+    Outbid outbid = 5;
 
     // Bundle expired and was pruned from the mempool.
-    ExpiredAndPruned expired_and_pruned = 8;
+    ExpiredAndPruned expired_and_pruned = 6;
 
     // Some unknown, internal error occurred.
     InternalError internal_error = 100;
