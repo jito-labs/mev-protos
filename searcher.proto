@@ -57,15 +57,21 @@ message PendingTxNotification {
   repeated packet.Packet transactions = 3;
 }
 
-message NextScheduledLeaderRequest {}
+message NextScheduledLeaderRequest {
+  // Defaults to the currently connected region if no region provided.
+  repeated string regions = 1;
+}
 
 message NextScheduledLeaderResponse {
   // the current slot the backend is on
   uint64 current_slot = 1;
 
-  // the slot and identity of the next leader
+  // the slot of the next leader
   uint64 next_leader_slot = 2;
+  // the identity pubkey (base58) of the next leader
   string next_leader_identity = 3;
+  // the block engine region of the next leader
+  string next_leader_region = 4;
 }
 
 message ConnectedLeadersRequest {}
