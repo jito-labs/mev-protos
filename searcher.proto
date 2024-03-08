@@ -13,7 +13,7 @@ message SlotList {
 
 message ConnectedLeadersResponse {
   // Mapping of validator pubkey to leader slots for the current epoch.
-  map<string /* validator pubkey */ , SlotList> connected_validators = 1;
+  map<string /* validator pubkey */, SlotList> connected_validators = 1;
 }
 
 message SendBundleRequest {
@@ -23,38 +23,6 @@ message SendBundleRequest {
 message SendBundleResponse {
   // server uuid for the bundle
   string uuid = 1;
-}
-
-message ProgramSubscriptionV0 {
-  // Base58 encoded program id that transactions mention
-  repeated string programs = 1;
-}
-
-message WriteLockedAccountSubscriptionV0 {
-  // Base58 encoded account pubkey that transactions mention
-  repeated string accounts = 1;
-}
-
-message MempoolSubscription {
-  // Filter by program id or account pubkey
-  oneof msg {
-    ProgramSubscriptionV0 program_v0_sub = 1;
-    WriteLockedAccountSubscriptionV0 wla_v0_sub = 2;
-    /// field numbers upto (and incl) 9 are reserved
-  }
-
-  // Filters transactions to originate from specified regions.
-  // Defaults to the currently connected region.
-  repeated string regions = 10;
-}
-
-message PendingTxNotification {
-  // server-side timestamp the transactions were generated at (for debugging/profiling purposes)
-  google.protobuf.Timestamp server_side_ts = 1;
-  // expiration time of the packet
-  google.protobuf.Timestamp expiration_time = 2;
-  // list of pending transactions
-  repeated packet.Packet transactions = 3;
 }
 
 message NextScheduledLeaderRequest {
@@ -81,7 +49,7 @@ message ConnectedLeadersRegionedRequest {
   repeated string regions = 1;
 }
 message ConnectedLeadersRegionedResponse {
-  map<string /* region */ , ConnectedLeadersResponse> connected_validators = 1;
+  map<string /* region */, ConnectedLeadersResponse> connected_validators = 1;
 }
 
 
@@ -107,9 +75,6 @@ service SearcherService {
   // Searchers can invoke this endpoint to subscribe to their respective bundle results.
   // A success result would indicate the bundle won its state auction and was submitted to the validator.
   rpc SubscribeBundleResults (SubscribeBundleResultsRequest) returns (stream bundle.BundleResult) {}
-
-  // Subscribe to mempool transactions based on a few filters
-  rpc SubscribeMempool (MempoolSubscription) returns (stream PendingTxNotification) {}
 
   rpc SendBundle (SendBundleRequest) returns (SendBundleResponse) {}
 
