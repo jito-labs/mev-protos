@@ -3,9 +3,6 @@ syntax = "proto3";
 package searcher;
 
 import "bundle.proto";
-import "packet.proto";
-
-import "google/protobuf/timestamp.proto";
 
 message SlotList {
   repeated uint64 slots = 1;
