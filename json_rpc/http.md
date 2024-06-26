@@ -4,7 +4,22 @@ The block engine accepts HTTP requests using the [JSON-RPC 2.0](https://www.json
 
 ## RPC HTTP Endpoint
 
+Jito has two rpc http endpoints.
+
+### Bundles
+
+For bundle related stuff where the user creates the bundles, please use.
 **Default port:** 443 e.g. [https://mainnet.block-engine.jito.wtf:443/api/v1/bundles](https://mainnet.block-engine.jito.wtf:443/api/v1/bundles), [https://{REGION}.mainnet.block-engine.jito.wtf:443/api/v1/bundles](https://${REGION}.mainnet.block-engine.jito.wtf:443/api/v1/bundles)
+
+### Transactions
+
+Jito also provides a transactions endpoint to act as a [sendTransaction](https://solana.com/docs/rpc/http/sendtransaction) proxy. This can be accessed at,
+**Default port:** 443 e.g. [https://mainnet.block-engine.jito.wtf:443/api/v1/transactions](https://mainnet.block-engine.jito.wtf:443/api/v1/transactions), [https://{REGION}.mainnet.block-engine.jito.wtf:443/api/v1/transactions](https://${REGION}.mainnet.block-engine.jito.wtf:443/api/v1/transactions)
+
+This endpoint also supports a query parameter. This can be used as
+e.g. [https://mainnet.block-engine.jito.wtf:443/api/v1/transactions?bundleOnly=true](https://mainnet.block-engine.jito.wtf:443/api/v1/transactions?bundleOnly=true), [https://{REGION}.mainnet.block-engine.jito.wtf:443/api/v1/transactions?bundleOnly=true](https://${REGION}.mainnet.block-engine.jito.wtf:443/api/v1/transactions?bundleOnly=true)
+
+Details regarding each can be found in the following sections
 
 ## Request Formatting
 
@@ -82,6 +97,10 @@ Many methods that take a commitment parameter return an RpcResponse JSON object 
 ```
 
 ## JSON RPC API Reference
+
+## [Bundles endpoint](#bundles)
+
+Details of rpc methods that can be used with the bundles endpoint are the following.
 
 ## getTipAccounts
 
@@ -240,6 +259,52 @@ curl https://mainnet.block-engine.jito.wtf:443/api/v1/bundles -X POST -H "Conten
       }
     ]
   },
+  "id": 1
+}
+```
+
+## [Transactions endpoint](#transactions)
+
+Details of rpc methods that can be used with the transactions endpoint are the following.
+
+## sendTransaction
+
+This method acts as a proxy to the [solana sendTransaction RPC Method](https://solana.com/docs/rpc/http/sendtransaction). This method will send the transaction received as a regular solana transaction via the solana rpc method and also submit it as a bundle. The bundling and a minimum tip for the bundle would be paid by Jito. Please note that the minimum tip might not be enough to get the bundle through the auction. If you use the query parameter, **bundleOnly=true**, the transaction will only be send out as a bundle and not as a regular transaction via the rpc.
+
+### Parameters
+
+Please follow the guidelines in <https://solana.com/docs/rpc/http/sendtransaction#parameters>
+
+### Result
+
+The result will be the same as <https://solana.com/docs/rpc/http/sendtransaction#result>
+If sending as a bundle was successful, you can get the bundle_id for further querying from the custom header in the response **x-bundle-id**
+
+### Code sample
+
+The samples are the same found at <https://solana.com/docs/rpc/http/sendtransaction#code-sample> and the response <https://solana.com/docs/rpc/http/sendtransaction#response>
+
+#### Request
+
+```bash
+curl https://mainnet.block-engine.jito.wtf:443/api/v1/transactions -X POST -H "Content-Type: application/json" -d '
+  {
+    "jsonrpc": "2.0",
+    "id": 1,
+    "method": "sendTransaction",
+    "params": [
+      "4hXTCkRzt9WyecNzV1XPgCDfGAZzQKNxLXgynz5QDuWWPSAZBZSHptvWRL3BjCvzUXRdKvHL2b7yGrRQcWyaqsaBCncVG7BFggS8w9snUts67BSh3EqKpXLUm5UMHfD7ZBe9GhARjbNQMLJ1QD3Spr6oMTBU6EhdB4RD8CP2xUxr2u3d6fos36PD98XS6oX8TQjLpsMwncs5DAMiD4nNnR8NBfyghGCWvCVifVwvA8B8TJxE1aiyiv2L429BCWfyzAme5sZW8rDb14NeCQHhZbtNqfXhcp2tAnaAT"
+    ]
+  }
+'
+```
+
+#### Response
+
+```json
+{
+  "jsonrpc": "2.0",
+  "result": "2id3YC2jK9G5Wo2phDx4gJVAew8DcY5NAojnVuao8rkxwPYPe8cSwE5GzhEgJA2y8fVjDEo6iR6ykBvDxrTQrtpb",
   "id": 1
 }
 ```
