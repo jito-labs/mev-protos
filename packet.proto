@@ -25,5 +25,6 @@ message PacketFlags {
   bool repair = 3;
   bool simple_vote_tx = 4;
   bool tracer_packet = 5;
+  bool from_staked_node = 6;
 }
 
