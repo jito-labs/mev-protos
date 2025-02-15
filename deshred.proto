@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package deshred;
+
+message Entry {
+    uint64 num_hashes = 1;
+    bytes hash = 2;
+    repeated bytes transactions = 3;
+}
+
+// tbd: we may want to add filters here
+message DeshredRequest {
+}
+
+service DeshredService {
+    rpc SubscribeToEntries(DeshredRequest) returns (stream Entry);
+}
