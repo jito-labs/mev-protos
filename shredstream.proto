@@ -49,6 +49,6 @@ message Entry {
   // the slot that the entry is from
   uint64 slot = 1;
 
-  // Serialized bytes of https://docs.rs/solana-entry/latest/solana_entry/entry/struct.Entry.html
-  repeated bytes entry = 2;
+  // Serialized bytes of Vec<Entry>: https://docs.rs/solana-entry/latest/solana_entry/entry/struct.Entry.html
+  bytes entries = 2;
 }
