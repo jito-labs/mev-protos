@@ -45,10 +45,10 @@ message ConnectedLeadersRegionedRequest {
   // Defaults to the currently connected region if no region provided.
   repeated string regions = 1;
 }
+
 message ConnectedLeadersRegionedResponse {
   map<string /* region */, ConnectedLeadersResponse> connected_validators = 1;
 }
-
 
 message GetTipAccountsRequest {}
 
@@ -59,6 +59,7 @@ message GetTipAccountsResponse {
 message SubscribeBundleResultsRequest {}
 
 message GetRegionsRequest {}
+
 message GetRegionsResponse {
   // The region the client is currently connected to
   string current_region = 1;
@@ -87,6 +88,6 @@ service SearcherService {
   // Returns the tip accounts searchers shall transfer funds to for the leader to claim.
   rpc GetTipAccounts (GetTipAccountsRequest) returns (GetTipAccountsResponse) {}
 
-  // Returns region the client is directly connected to, along with all available regions
+  // Returns region the client is directly connected to, along with all available regions.
   rpc GetRegions (GetRegionsRequest) returns (GetRegionsResponse) {}
 }
