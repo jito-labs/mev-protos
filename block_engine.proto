@@ -71,9 +71,9 @@ message GetBlockEngineEndpointRequest {}
 
 // Represents a block engine endpoint with both a URL and a shredstream receiver address.
 message BlockEngineEndpoint {
-  // Block Engine HTTP URL
+  // Block Engine HTTP URL, eg. `https://mainnet.block-engine.jito.wtf`
   string block_engine_url = 1;
-  // Shredstream Receiver Address (hostname with port)
+  // Shredstream Receiver Address (hostname with port), eg. `shredstream.mainnet.block-engine.jito.wtf:1002`
   string shredstream_receiver_address = 2;
 }
 
