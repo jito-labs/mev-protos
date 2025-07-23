@@ -66,6 +66,26 @@ message StartExpiringPacketStreamResponse {
   shared.Heartbeat heartbeat = 1;
 }
 
+// Request a list of block engine endpoints to communicate with.
+message GetBlockEngineEndpointRequest {}
+
+// Represents a block engine endpoint with both a URL and a shredstream receiver address.
+message BlockEngineEndpoint {
+  // Block Engine HTTP URL, eg. `https://mainnet.block-engine.jito.wtf`
+  string block_engine_url = 1;
+  // Shredstream Receiver Address (hostname with port), eg. `shredstream.mainnet.block-engine.jito.wtf:1002`
+  string shredstream_receiver_address = 2;
+}
+
+// Response message containing both global and regioned endpoints.
+message GetBlockEngineEndpointResponse {
+  // Global endpoint that automatically routes to the closest block engine.
+  BlockEngineEndpoint global_endpoint = 1;
+  // List of regioned endpoints the client can connect to.
+  repeated BlockEngineEndpoint regioned_endpoints = 2;
+}
+
+
 /// Validators can connect to Block Engines to receive packets and bundles.
 service BlockEngineValidator {
   /// Validators can subscribe to the block engine to receive a stream of packets
@@ -77,6 +97,9 @@ service BlockEngineValidator {
   // Block builders can optionally collect fees. This returns fee information if a block builder wants to
   // collect one.
   rpc GetBlockBuilderFeeInfo (BlockBuilderFeeInfoRequest) returns (BlockBuilderFeeInfoResponse) {}
+
+  // Get list of Block Engine Endpoints (global and regioned) to find the optimal region.
+  rpc GetBlockEngineEndpoints (GetBlockEngineEndpointRequest) returns (GetBlockEngineEndpointResponse) {}
 }
 
 /// Relayers can forward packets to Block Engines.
